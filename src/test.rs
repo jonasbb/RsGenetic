@@ -49,13 +49,11 @@ impl Phenotype<MyFitness> for Test {
         Test { f: cmp::min(self.f, t.f) }
     }
 
-    fn mutate(&self) -> Test {
+    fn mutate(&mut self) {
         if self.f < 0 {
-            Test { f: self.f + 1 }
+            self.f += 1
         } else if self.f > 0 {
-            Test { f: self.f - 1 }
-        } else {
-            *self
+            self.f -= 1
         }
     }
 }

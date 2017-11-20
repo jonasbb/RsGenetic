@@ -100,7 +100,10 @@ impl<'a, T, F> Simulation<'a, T, F> for Simulator<'a, T, F>
                 children = parents
                     .iter()
                     .map(|&(ref a, ref b)| a.crossover(b))
-                    .map(|c| c.mutate())
+                    .map(|mut c| {
+                        c.mutate();
+                        c
+                    })
                     .collect();
             }
             // Kill off parts of the population at random to make room for the children

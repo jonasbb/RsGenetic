@@ -90,15 +90,12 @@ impl Phenotype<SchemeFitness> for LoadingScheme {
         LoadingScheme { scheme: crossed_over }
     }
 
-    fn mutate(&self) -> LoadingScheme {
+    fn mutate(&mut self) {
         // Put some stuff on other trucks
         let mut rng = ::rand::thread_rng();
-        LoadingScheme {
-            scheme: self.scheme
-                        .iter()
-                        .map(|&(_, size)| (rng.gen::<usize>() % NUM_TRUCKS, size))
-                        .collect(),
-        }
+        self.scheme
+            .iter_mut()
+            .for_each(|&mut (ref mut truck, _)| *truck = rng.gen::<usize>() % NUM_TRUCKS);
     }
 }
 

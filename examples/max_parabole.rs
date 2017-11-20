@@ -75,7 +75,7 @@ impl Phenotype<MyFitness> for MyData {
         MyData { x: (self.x + other.x) / 2.0 }
     }
 
-    fn mutate(&self) -> MyData {
+    fn mutate(&mut self) {
         // Shift x with a random number.
         // (This RNG code should reside somewhere else, not in this function, but it's just an
         // example).
@@ -86,7 +86,7 @@ impl Phenotype<MyFitness> for MyData {
         let between = Range::new(-1.0, 1.0);
         let mut rng = rand::thread_rng();
         let offset = between.ind_sample(&mut rng);
-        MyData { x: self.x + offset }
+        self.x += offset;
     }
 }
 
