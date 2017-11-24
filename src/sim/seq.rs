@@ -23,6 +23,7 @@
 use pheno::Phenotype;
 use pheno::Fitness;
 use rand::Rng;
+use rayon::prelude::*;
 use super::*;
 use super::select::*;
 use super::iterlimit::*;
@@ -47,7 +48,7 @@ pub struct Simulator<'a, T, F>
 }
 
 impl<'a, T, F> Simulation<'a, T, F> for Simulator<'a, T, F>
-    where T: Phenotype<F>,
+    where T: Phenotype<F> + Send + Sync,
           F: Fitness
 {
     type B = SimulatorBuilder<'a, T, F>;
@@ -98,7 +99,7 @@ impl<'a, T, F> Simulation<'a, T, F> for Simulator<'a, T, F>
                 };
                 // Create children from the selected parents and mutate them.
                 children = parents
-                    .iter()
+                    .par_iter()
                     .map(|&(ref a, ref b)| a.crossover(b))
                     .map(|mut c| {
                         c.mutate();
